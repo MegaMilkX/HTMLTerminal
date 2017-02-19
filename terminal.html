@@ -1,0 +1,152 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Title of the document</title>
+
+<style>
+
+@font-face
+{
+    font-family:"FixedsysExcelsior301Regular";
+    src: url("fsex300-webfont.woff");
+}
+
+#terminal
+{
+    font-family:"FixedsysExcelsior301Regular";
+}
+
+body
+{
+    background-color:#000;
+    color:#ccc;
+    font-family:"FixedsysExcelsior301Regular";
+}
+
+#cursor
+{
+    background-color:#ccc;
+    -webkit-animation: blink 2s linear 0s infinite;
+    -moz-animation: blink 2s linear 0s infinite;
+    -ms-animation: blink 2s linear 0s infinite;
+    -o-animation: blink 2s linear 0s infinite;
+}
+
+@-webkit-keyframes blink {
+  0%   { background: #ccc; color:#000; }
+  47%  { background: #ccc;  color:#000; }
+  50%  { background: #000; color:#ccc; }
+  97%  { background: #000; color:#ccc; }
+  100% { background: #ccc;  color:#000; }
+}
+
+@-moz-keyframes blink {
+  0%   { background: #ccc; color:#000; }
+  47%  { background: #ccc;  color:#000; }
+  50%  { background: #000; color:#ccc; }
+  97%  { background: #000; color:#ccc; }
+  100% { background: #ccc;  color:#000; }
+}
+
+@-ms-keyframes blink {
+  0%   { background: #ccc; color:#000; }
+  47%  { background: #ccc;  color:#000; }
+  50%  { background: #000; color:#ccc; }
+  97%  { background: #000; color:#ccc; }
+  100% { background: #ccc;  color:#000; }
+}
+
+@-o-keyframes blink {
+  0%   { background: #ccc; color:#000; }
+  47%  { background: #ccc;  color:#000; }
+  50%  { background: #000; color:#ccc; }
+  97%  { background: #000; color:#ccc; }
+  100% { background: #ccc;  color:#000; }
+}
+
+pre
+{
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+</style>
+
+</head>
+
+<body>
+
+<pre id="terminal">
+<span id="cursor">_</span>
+</pre>
+<div hidden id="buffer"></div>
+
+
+<!-- jQuery -->
+<script src="jquery-3.1.1.min.js"></script>
+
+<script>
+    var cursorPos = 0;
+    
+    $("body").keypress(function(e) {
+        e.preventDefault();
+        
+        
+        
+        if(e.which == 37) // left
+        {
+            if(cursorPos > 0)
+                cursorPos--;
+        }
+        
+        if(e.which == 39) // right
+        {
+            if(cursorPos < $("#buffer").text().length)
+                cursorPos++;
+        }
+        
+        if(e.which == 13)
+        {
+            $("#buffer").text("");
+            cursorPos = 0;
+        }
+        else if(e.which == 8)
+        {
+            $("#buffer").text($("#buffer").text().slice(0,-1));
+        }
+        else
+        {
+            var insert = String.fromCharCode(e.which);
+            var tText = $("#buffer").text();
+            tText = tText.substr(0, cursorPos) + insert + tText.substr(cursorPos);
+            cursorPos++;
+            $("#buffer").text(tText);
+        }
+        
+        var terminalText = $("#buffer").text();
+        
+        if(cursorPos == terminalText.length)
+        {
+            terminalText = terminalText + "<span id=\"cursor\">_</span>";
+        }
+        else
+        {
+            var character = terminalText.charAt(cursorPos);
+            terminalText = terminalText.substr(0, cursorPos) + "<span id=\"cursor\">" + character + "</span>" + terminalText.substr(cursorPos + 1);
+            
+        }
+        
+        $("#terminal").html(terminalText);
+        
+        e.stopPropagation();
+    });
+
+</script>
+
+</body>
+
+</html> 

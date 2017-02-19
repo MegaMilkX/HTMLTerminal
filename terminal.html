@@ -117,6 +117,8 @@ pre
         else if(e.which == 8)
         {
             $("#buffer").text($("#buffer").text().slice(0,-1));
+            if(cursorPos > 0)
+                cursorPos--;
         }
         else
         {
